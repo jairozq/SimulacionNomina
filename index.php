@@ -15,7 +15,7 @@
             height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Que quede arriba */
+            align-items: flex-start;
             background-color: #f9f9f9;
         }
         
@@ -46,7 +46,7 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 95%;        /* Aquí lo hacemos bien ancho */
+            width: 95%;
             display: flex;
             justify-content: center;
             margin: 0 auto;
@@ -60,7 +60,6 @@
             margin-top: 10px;
         }
         
-        /* Estilo para los inputs */
         .input {
             width: 100%;
             padding: 10px;
@@ -72,7 +71,7 @@
         }
         
         .input:focus {
-            border-color: #ff7f7f;  /* Bordes rojos al enfocar */
+            border-color: #ff7f7f;
             outline: none;
             background: #fff;
         }
@@ -81,7 +80,6 @@
         button {
             width: 70%;
             padding: 10px;
-            /*background: #ff7f7f;  /* Rojo suave para el botón */
             color: white;
             border: none;
             border-radius: 5px;
@@ -91,13 +89,13 @@
         }
         
         button:hover {
-            background: #ff4d4d;  /* Cambio de color al pasar el ratón */
+            background: #ff4d4d;
         }
         
         .opciones-botones{
             flex: 1;
             padding: 10px;
-            background: #ff7f7f;  /* Color del botón */
+            background: #ff7f7f;
             color: white;
             border: none;
             border-radius: 5px;
@@ -114,7 +112,7 @@
         
          h3 {
             text-align: center;
-            color: #ff7f7f;  /* Rojo suave para el título */
+            color: #ff7f7f;
             margin-bottom: 15px;
         }
         
@@ -306,10 +304,7 @@
     let especializacion = 0;
     let maestria = 0;
     let doctorado = 0;
-    
-    
     let totalPuntos = 0;
-    // puntos = totalPuntos*valorPunto 
     
     function visualizarFormulario(tipoDocente){
         document.getElementById("tipoDocente").style.display = 'none';
@@ -339,7 +334,7 @@
         
         nuevaFila.insertCell(0).innerText = nombre;
         nuevaFila.insertCell(1).innerText = apellido;
-        nuevaFila.insertCell(2).innerText = new Date().toISOString().split('T')[0]; // Fecha actual (YYYY-MM-DD)
+        nuevaFila.insertCell(2).innerText = new Date().toISOString().split('T')[0];
         nuevaFila.insertCell(3).innerText = cedula;
         nuevaFila.insertCell(4).innerText = (tipoDocenteTemp === 1) ? 'Docente de Planta' : 'Docente Ocasional';
         nuevaFila.insertCell(5).innerText = (pregradoSelect === "normal") ? pregrado : pregradoE;
@@ -348,6 +343,39 @@
         nuevaFila.insertCell(8).innerText = doctorado;
         nuevaFila.insertCell(9).innerText = `$${salario.toLocaleString('es-CO')}`;
         inicioSimulacion();
+    }
+    
+    function actualizarTablaTotales(tipoDocente, valor) {
+        const filas = document.querySelectorAll("#tablaDocentes tr");
+        let totalCantidad = 0;
+        let totalGasto = 0;
+        
+        filas.forEach(fila => {
+        const tipo = fila.getAttribute("data-tipo");
+        let cantidadCell = fila.querySelector(".cantidad");
+        let gastoCell = fila.querySelector(".gasto");
+        let promedioCell = fila.querySelector(".promedio");
+        
+        let cantidad = parseInt(cantidadCell.innerText) || 0;
+        let gasto = parseFloat(gastoCell.innerText.replace(/\$|,/g, "")) || 0;
+        
+        if (tipo === tipoDocente) {
+          cantidad += 1;
+          gasto += valor;
+        }
+        
+        let promedio = cantidad > 0 ? (gasto / cantidad) : 0;
+        
+        cantidadCell.innerText = cantidad;
+        gastoCell.innerText = `$${gasto.toLocaleString()}`;
+        promedioCell.innerText = `$${promedio.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+        
+        totalCantidad += cantidad;
+        totalGasto += gasto;
+        });
+        
+        const promedioGeneral = totalCantidad > 0 ? (totalGasto / totalCantidad) : 0;
+        document.getElementById("Total").innerText = `Total Docentes: ${totalCantidad} | Gasto Total: $${totalGasto.toLocaleString()} | Promedio: $${promedioGeneral.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
     }
     
     function visualizarOpcionesDocentes(){
@@ -390,9 +418,9 @@
     
     document.getElementById("inputPunto").addEventListener("input", function (e) {
         const divBtnSiguiente = document.getElementById("btn-siguiente");
-            let valor = this.value.replace(/\D/g, ""); // Elimina caracteres no numéricos
+            let valor = this.value.replace(/\D/g, "");
             if (valor === "") {
-                this.value = ""; // Si está vacío, no muestra nada
+                this.value = "";
                 return;
             }
             
@@ -402,13 +430,13 @@
                 divBtnSiguiente.style.display = 'none';
             }
         
-            let numero = parseInt(valor, 10); // Convierte el valor a número
+            let numero = parseInt(valor, 10);
             this.value = `$${numero.toLocaleString("es-CO")}`;
     });
     
     document.getElementById("inputNombre").addEventListener("input", function (e) {
         const divBtnSiguiente = document.getElementById("btn-guardar");
-        this.value = this.value.replace(/[0-9]/g, "").replace(/[^a-zA-Z\s]/g, ""); // Elimina caracteres no numéricos
+        this.value = this.value.replace(/[0-9]/g, "").replace(/[^a-zA-Z\s]/g, "");
         
         if(this.value.length>0 && document.getElementById("inputApellido").value.length>0 && document.getElementById("inputCedula").value.length>6){
             divBtnSiguiente.style.display = '';
@@ -419,7 +447,7 @@
     
     document.getElementById("inputApellido").addEventListener("input", function (e) {
         const divBtnSiguiente = document.getElementById("btn-guardar");
-        this.value = this.value.replace(/[0-9]/g, "").replace(/[^a-zA-Z\s]/g, ""); // Elimina caracteres no numéricos
+        this.value = this.value.replace(/[0-9]/g, "").replace(/[^a-zA-Z\s]/g, "");
         
         if(this.value.length>0 && document.getElementById("inputCedula").value.length>6 && document.getElementById("inputNombre").value.length>0){
         divBtnSiguiente.style.display = '';
@@ -430,7 +458,7 @@
     
     document.getElementById("inputCedula").addEventListener("input", function () {
         const divBtnSiguiente = document.getElementById("btn-guardar");
-        this.value = this.value.replace(/\D/g, ""); // Elimina caracteres no numéricos
+        this.value = this.value.replace(/\D/g, "");
         
         if (this.value.length > 10) {
             this.value = this.value.slice(0, 10);
