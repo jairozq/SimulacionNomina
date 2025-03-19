@@ -414,8 +414,9 @@
     
     function inicioSimulacion(){
         document.getElementById("inputCanEspecializacion").style.display = 'none';
-        document.getElementById("btn-siguiente").style.display = 'none';
         document.getElementById("inputCanMaestrias").style.display = 'none';
+        document.getElementById("btn-siguiente").style.display = 'none';
+        document.getElementById("btn-guardar").style.display = 'none';
         document.getElementById("inputCanDoc").style.display = 'none';
         document.getElementById("opcionPunto").style.display = 'none';
         document.getElementById("tipoDocente").style.display = '';
