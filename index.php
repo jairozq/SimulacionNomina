@@ -182,7 +182,7 @@
                     </select>
                     <div class="alinear">
                         <label class="label">Especialización</label>
-                        <input type="checkbox" class="check unchecked" id="miCheckbox">
+                        <input type="checkbox" class="check unchecked" id="checkbox">
                     </div>
                     <div class="alinear" id="inputCanEspecializacion" style="display: none">
                         <label class="label">Cantidad:</label>
@@ -191,7 +191,7 @@
                     
                     <div class="alinear">
                         <label class="label">Maestria</label>
-                        <input type="checkbox" class="check unchecked" id="miCheckbox2">
+                        <input type="checkbox" class="check unchecked" id="checkbox2">
                     </div>
                     <div class="alinear" id="inputCanMaestrias" style="display: none">
                         <label class="label">Cantidad:</label>
@@ -200,7 +200,7 @@
                     
                     <div class="alinear">
                         <label class="label">Doctorado</label>
-                        <input type="checkbox" class="check unchecked" id="miCheckbox3">
+                        <input type="checkbox" class="check unchecked" id="checkbox3">
                     </div>
                     <div class="alinear" id="inputCanDoc" style="display: none">
                         <label class="label">Cantidad:</label>
@@ -269,20 +269,20 @@
                       <th>Promedio</th>
                     </tr>
                   </thead>
-                    <tbody id="tablaDocentes">
-                        <tr>
-                            <td>Docente de Planta</td>
-                            <td>1</td>
-                            <td>$6.644.610</td>
-                            <td>$6.644.610</td>
-                        </tr>
-                        <tr>
-                            <td>Docente Ocacionales</td>
-                            <td>0</td>
-                            <td>$0</td>
-                            <td>$0</td>
-                        </tr>
-                    </tbody>
+                  <tbody id="tablaDocentes">
+                    <tr data-tipo="Docente de Planta">
+                      <td>Docente de Planta</td>
+                      <td class="cantidad">1</td>
+                      <td class="gasto">$6.644.610</td>
+                      <td class="promedio">$6.644.610</td>
+                    </tr>
+                    <tr data-tipo="Docente Ocacionales">
+                      <td>Docente Ocacionales</td>
+                      <td class="cantidad">0</td>
+                      <td class="gasto">$0</td>
+                      <td class="promedio">$0</td>
+                    </tr>
+                  </tbody>
                 </table>
                 <p id="Total">Total Docentes: 0 | Gasto Total: $0 | Promedio: $0</p>
             </div>
@@ -342,40 +342,44 @@
         nuevaFila.insertCell(7).innerText = maestria;
         nuevaFila.insertCell(8).innerText = doctorado;
         nuevaFila.insertCell(9).innerText = `$${salario.toLocaleString('es-CO')}`;
+        actualizarTablaTotales(pregradoSelect,salario);
         inicioSimulacion();
     }
     
     function actualizarTablaTotales(tipoDocente, valor) {
-        const filas = document.querySelectorAll("#tablaDocentes tr");
-        let totalCantidad = 0;
-        let totalGasto = 0;
-        
-        filas.forEach(fila => {
+      const filas = document.querySelectorAll("#tablaDocentes tr");
+      let totalCantidad = 0;
+      let totalGasto = 0;
+      
+      filas.forEach(fila => {
         const tipo = fila.getAttribute("data-tipo");
         let cantidadCell = fila.querySelector(".cantidad");
         let gastoCell = fila.querySelector(".gasto");
         let promedioCell = fila.querySelector(".promedio");
-        
+    
         let cantidad = parseInt(cantidadCell.innerText) || 0;
         let gasto = parseFloat(gastoCell.innerText.replace(/\$|,/g, "")) || 0;
-        
-        if (tipo === tipoDocente) {
+    
+        // Solo modifica la fila correspondiente al tipo
+        if (parseInt(tipo) === tipoDocente) {
           cantidad += 1;
           gasto += valor;
         }
-        
+    
+        // Calcula promedio
         let promedio = cantidad > 0 ? (gasto / cantidad) : 0;
-        
+    
+        // Actualiza celdas
         cantidadCell.innerText = cantidad;
-        gastoCell.innerText = `$${gasto.toLocaleString()}`;
-        promedioCell.innerText = `$${promedio.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
-        
+        gastoCell.innerText = `$${gasto.toLocaleString('es-CO')}`;
+        promedioCell.innerText = `$${promedio.toLocaleString('es-CO', { minimumFractionDigits: 2 })}`;
+    
         totalCantidad += cantidad;
         totalGasto += gasto;
-        });
-        
-        const promedioGeneral = totalCantidad > 0 ? (totalGasto / totalCantidad) : 0;
-        document.getElementById("Total").innerText = `Total Docentes: ${totalCantidad} | Gasto Total: $${totalGasto.toLocaleString()} | Promedio: $${promedioGeneral.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+      });
+    
+      const promedioGeneral = totalCantidad > 0 ? (totalGasto / totalCantidad) : 0;
+      document.getElementById("Total").innerText = `Total Docentes: ${totalCantidad} | Gasto Total: $${totalGasto.toLocaleString('es-CO')} | Promedio: $${promedioGeneral.toLocaleString('es-CO', { minimumFractionDigits: 2 })}`;
     }
     
     function visualizarOpcionesDocentes(){
@@ -396,7 +400,6 @@
     }
     
     function inicioSimulacion(){
-        console.log("Valor punto: "+valorPunto)
         document.getElementById("opcionPunto").style.display = 'none';
         document.getElementById("tipoDocente").style.display = '';
         document.getElementById("simulacion").style.display = '';
@@ -404,9 +407,9 @@
         document.getElementById("card").style.display = 'none';
         document.getElementById("totales").style.display = '';
         document.getElementById("inputNombre").value = "";
-        document.getElementById("inputNombre").value = "";
-        document.getElementById("inputNombre").value = "";
-        document.getElementById('checkbox1').checked = false;
+        document.getElementById("inputApellido").value = "";
+        document.getElementById("inputCedula").value = "";
+        document.getElementById('checkbox').checked = false;
         document.getElementById('checkbox2').checked = false;
         document.getElementById('checkbox3').checked = false;
         especializacion = 0;
@@ -471,7 +474,7 @@
         }
     });
     
-    document.getElementById('miCheckbox').addEventListener('change', function () {
+    document.getElementById('checkbox').addEventListener('change', function () {
         if (this.checked) {
           document.getElementById("inputCanEspecializacion").style.display = '';
           totalPuntos = totalPuntos + 20;
@@ -493,7 +496,7 @@
         }
     });
       
-    document.getElementById('miCheckbox2').addEventListener('change', function () {
+    document.getElementById('checkbox2').addEventListener('change', function () {
         if (this.checked) {
             document.getElementById("inputCanMaestrias").style.display = '';
             totalPuntos = totalPuntos + 40;
@@ -515,7 +518,7 @@
         }
     });
       
-    document.getElementById('miCheckbox3').addEventListener('change', function () {
+    document.getElementById('checkbox3').addEventListener('change', function () {
         if (this.checked) {
           document.getElementById("inputCanDoc").style.display = '';
           totalPuntos = totalPuntos + 80;
