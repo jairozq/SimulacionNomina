@@ -6,11 +6,10 @@
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css">
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <title>Nomina</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Be Vietnam Pro', sans-serif;
             margin: 15px;
             padding: 0;
             height: 100vh;
@@ -148,6 +147,12 @@
         .pequeno{
          width: 80px; 
         }
+        
+        .alinear {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
     </style>
 </head>
 
@@ -177,29 +182,29 @@
                       <option value="normal">Normal</option>
                       <option value="especial">Especial</option>
                     </select>
-                    <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="alinear">
                         <label class="label">Especialización</label>
                         <input type="checkbox" class="check unchecked" id="miCheckbox">
                     </div>
-                    <div id="inputAñosEspecializacion" style="display: flex; align-items: center; gap: 10px;" style="display: none">
+                    <div class="alinear" id="inputCanEspecializacion" style="display: none">
                         <label class="label">Cantidad:</label>
                         <input id="numEspecializacion" class="input pequeno text-center" type="number" max="2" min="1" value="1" onkeydown="return false;"></input>
                     </div>
                     
-                    <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="alinear">
                         <label class="label">Maestria</label>
                         <input type="checkbox" class="check unchecked" id="miCheckbox2">
                     </div>
-                    <div id="inputAñosEspecializacion" style="display: flex; align-items: center; gap: 10px;" style="display: none">
+                    <div class="alinear" id="inputCanMaestrias" style="display: none">
                         <label class="label">Cantidad:</label>
                         <input id="numMaestria" class="input pequeno text-center" type="number" max="2" min="1" value="1" onkeydown="return false;"></input>
                     </div>
                     
-                    <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="alinear">
                         <label class="label">Doctorado</label>
-                        <input type="checkbox" class="check unchecked" id="miCheckbox2">
+                        <input type="checkbox" class="check unchecked" id="miCheckbox3">
                     </div>
-                    <div id="inputAñosEspecializacion" style="display: flex; align-items: center; gap: 10px;" style="display: none">
+                    <div class="alinear" id="inputCanDoc" style="display: none">
                         <label class="label">Cantidad:</label>
                         <input id="numDoctorado" class="input pequeno text-center" type="number" max="2" min="1" value="1" onkeydown="return false;"></input>
                     </div>
@@ -224,8 +229,8 @@
             <div class="button">
                 <button class="opciones-botones button" onclick=visualizarOpcionesDocentes()>Agregar Docente</button>
             </div>
-            <div class="tabla" id="tabla">
-                <table border="1" cellpadding="10" cellspacing="0">
+            <div class="tabla" id="tablas">
+                <table border="1" cellpadding="10" cellspacing="0" id="tabla1">
                   <thead>
                     <tr>
                       <th>Nombre</th>
@@ -233,7 +238,7 @@
                       <th>Fecha de Ingreso</th>
                       <th>Cédula</th>
                       <th>Tipo Docente</th>
-                      <th>Posgrado</th>
+                      <th>Pregrado</th>
                       <th>Especialización</th>
                       <th>Maestria</th>
                       <th>Doctorado</th>
@@ -247,34 +252,42 @@
                       <td>2023-01-15</td>
                       <td>12345678</td>
                       <td>Docente de Planta</td>
-                      <td>17</td>
-                      <td>56</td>
-                      <td>47</td>
-                      <td>84</td>
-                      <td>$1,200</td>
+                      <td>178</td>
+                      <td>20</td>
+                      <td>40</td>
+                      <td>80</td>
+                      <td>$6.644.610</td>
                     </tr>
                   </tbody>
                 </table>
             </div>
-        </div>
-        <div id="totales">
-            <table border="1" cellpadding="10" cellspacing="0">
-              <thead>
-                <tr>
-                  <th>Tipo De Docentes</th>
-                  <th>Cantidad De Docentes</th>
-                  <th>Gasto Totales</th>
-                  <th>Promedio</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr></tr>
-                <tr></tr>
-                <tr></tr>
-                <tr></tr>
-              </tbody>
-            </table>
-            <p id="Total">Total: $0</p>
+            <div id="totales">
+                <table border="1" cellpadding="10" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Tipo De Docentes</th>
+                      <th>Cantidad De Docentes</th>
+                      <th>Gasto Totales</th>
+                      <th>Promedio</th>
+                    </tr>
+                  </thead>
+                    <tbody id="tablaDocentes">
+                        <tr>
+                            <td>Docente de Planta</td>
+                            <td>1</td>
+                            <td>$6.644.610</td>
+                            <td>$6.644.610</td>
+                        </tr>
+                        <tr>
+                            <td>Docente Ocacionales</td>
+                            <td>0</td>
+                            <td>$0</td>
+                            <td>$0</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p id="Total">Total Docentes: 0 | Gasto Total: $0 | Promedio: $0</p>
+            </div>
         </div>
     </div>
     
@@ -290,21 +303,13 @@
     let valorPunto = 0;
     let pregrado = 178;
     let pregradoE = 183;
-    let especializacion = 20;
-    let añoAdicionalE = 10;
-    let maestria = 40;
-    let doctorado = 80;
-    let soloDoctorado = 120
+    let especializacion = 0;
+    let maestria = 0;
+    let doctorado = 0;
     
     
     let totalPuntos = 0;
     // puntos = totalPuntos*valorPunto 
-    /*
-    especializacones maximas 2 puntos max 30
-    maestrias maximas 2 puntos max 60
-    doc maximas 2 puntos max 140
-    solo doctorado sin maestria 120
-    */
     
     function visualizarFormulario(tipoDocente){
         document.getElementById("tipoDocente").style.display = 'none';
@@ -315,6 +320,34 @@
         }else if(tipoDocente==2){
             tipoDocenteTemp = 2;
         }
+    }
+    
+    function guardarDocente(){
+        const apellido = document.getElementById("inputApellido").value;
+        const nombre = document.getElementById("inputNombre").value;
+        const cedula = document.getElementById("inputCedula").value;
+        const pregradoSelect = document.querySelector("select").value;
+        if (pregradoSelect === "normal"){
+            totalPuntos = totalPuntos + pregrado;
+        }else{
+            totalPuntos = totalPuntos + pregradoE;
+        }
+        const salario = totalPuntos * valorPunto;
+        
+        const tabla = document.getElementById("tabla1").getElementsByTagName('tbody')[0];
+        const nuevaFila = tabla.insertRow();
+        
+        nuevaFila.insertCell(0).innerText = nombre;
+        nuevaFila.insertCell(1).innerText = apellido;
+        nuevaFila.insertCell(2).innerText = new Date().toISOString().split('T')[0]; // Fecha actual (YYYY-MM-DD)
+        nuevaFila.insertCell(3).innerText = cedula;
+        nuevaFila.insertCell(4).innerText = (tipoDocenteTemp === 1) ? 'Docente de Planta' : 'Docente Ocasional';
+        nuevaFila.insertCell(5).innerText = (pregradoSelect === "normal") ? pregrado : pregradoE;
+        nuevaFila.insertCell(6).innerText = especializacion;
+        nuevaFila.insertCell(7).innerText = maestria;
+        nuevaFila.insertCell(8).innerText = doctorado;
+        nuevaFila.insertCell(9).innerText = `$${salario.toLocaleString('es-CO')}`;
+        inicioSimulacion();
     }
     
     function visualizarOpcionesDocentes(){
@@ -341,9 +374,16 @@
         document.getElementById("simulacion").style.display = '';
         document.getElementById("registro").style.display = '';
         document.getElementById("card").style.display = 'none';
+        document.getElementById("totales").style.display = '';
         document.getElementById("inputNombre").value = "";
         document.getElementById("inputNombre").value = "";
         document.getElementById("inputNombre").value = "";
+        document.getElementById('checkbox1').checked = false;
+        document.getElementById('checkbox2').checked = false;
+        document.getElementById('checkbox3').checked = false;
+        especializacion = 0;
+        maestria = 0;
+        doctorado = 0;
         tipoDocenteTemp = 0;
         totalPuntos = 0;
     }
@@ -405,13 +445,69 @@
     
     document.getElementById('miCheckbox').addEventListener('change', function () {
         if (this.checked) {
-          console.log('Checkbox marcado');
-          document.getElementById("inputAñosEspecializacion").style.display = '';
+          document.getElementById("inputCanEspecializacion").style.display = '';
+          totalPuntos = totalPuntos + 20;
+          especializacion = especializacion + 20;
         } else {
-          console.log('Checkbox desmarcado');
-          document.getElementById("inputAñosEspecializacion").style.display = 'none';
+          document.getElementById("inputCanEspecializacion").style.display = 'none';
+          totalPuntos = totalPuntos - 20;
+          especializacion = especializacion - 20;
         }
-      });
+    });
+    
+    document.getElementById('numEspecializacion').addEventListener('change', function () {
+        if (this.value == 2) {
+          totalPuntos = totalPuntos + 10;
+          especializacion = especializacion + 10;
+        } else {
+          totalPuntos = totalPuntos - 10;
+          especializacion = especializacion - 20;
+        }
+    });
+      
+    document.getElementById('miCheckbox2').addEventListener('change', function () {
+        if (this.checked) {
+            document.getElementById("inputCanMaestrias").style.display = '';
+            totalPuntos = totalPuntos + 40;
+            maestria = maestria + 40;
+        } else {
+            document.getElementById("inputCanMaestrias").style.display = 'none';
+            totalPuntos = totalPuntos - 40;
+            maestria = maestria - 40;
+        }
+    });
+    
+    document.getElementById('numMaestria').addEventListener('change', function () {
+        if (this.value == 2) {
+          totalPuntos = totalPuntos + 20;
+          maestria = maestria + 20;
+        } else {
+          totalPuntos = totalPuntos - 20;
+          maestria = maestria - 20;
+        }
+    });
+      
+    document.getElementById('miCheckbox3').addEventListener('change', function () {
+        if (this.checked) {
+          document.getElementById("inputCanDoc").style.display = '';
+          totalPuntos = totalPuntos + 80;
+          doctorado = doctorado + 80;
+        } else {
+          document.getElementById("inputCanDoc").style.display = 'none';
+          totalPuntos = totalPuntos - 80;
+          doctorado = doctorado - 80;
+        }
+    });
+    
+    document.getElementById('numDoctorado').addEventListener('change', function () {
+        if (this.value == 2) {
+            totalPuntos = totalPuntos + 40;
+            doctorado = doctorado + 40;
+        } else {
+            totalPuntos = totalPuntos - 40;
+            doctorado = doctorado - 40;
+        }
+    });
     </script>
 
 </body>
